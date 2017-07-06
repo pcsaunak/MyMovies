@@ -7,8 +7,9 @@ package offlineminds.com.mymovielist;
 public class config {
     public static String  baseUrl="http://api.themoviedb.org/3/movie/popular?api_key=503f36886ff6cc467d3a00842eb9c4bc";
     public static String imgBaseUrl="http://image.tmdb.org/t/p/w185";
-    //    3/movie/popular?api_key=503f36886ff6cc467d3a00842eb9c4bc"
-    public static final String DEVELOPER_KEY = "AIzaSyCQJMzjTSIV8ZR7gXPM8B7YiED7ywMnu5Q";
+
+    // ENTER YOUR PERSONAL API KEY HERE !!!
+    public static final String DEVELOPER_KEY = "xxxxxxxxxxxxxxx";
 
     // Database Version
     public static final int DATABASE_VERSION = 1;
