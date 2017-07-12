@@ -28,4 +28,14 @@ public class DetailFragResImplemented implements DetailFragResource {
     public void onSuccess(List list) {
         detailFragPresenter.onSuccessOfPresenter(list);
     }
+
+    @Override
+    public void getAdditionalMovieDetails(String movieId) {
+        retrofitCommunication.getAdditionalMovieDetails(movieId);
+    }
+
+    @Override
+    public void additionalDetailsSuccess(Object o) {
+        detailFragPresenter.additionalDetailsSuccess(o);
+    }
 }

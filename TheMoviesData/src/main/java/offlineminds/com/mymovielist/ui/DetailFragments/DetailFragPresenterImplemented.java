@@ -2,6 +2,8 @@ package offlineminds.com.mymovielist.ui.DetailFragments;
 
 import java.util.List;
 
+import offlineminds.com.mymovielist.pojo.AdditionalDetails;
+
 /**
  * Created by saunakc on 23/06/17.
  */
@@ -23,5 +25,15 @@ public class DetailFragPresenterImplemented implements DetailFragPresenter {
     @Override
     public void onSuccessOfPresenter(List list) {
         detailFragment.onSuccessOfView(list);
+    }
+
+    @Override
+    public void getAdditionalDetails(String movieId) {
+        detailFragResource.getAdditionalMovieDetails(movieId);
+    }
+
+    @Override
+    public void additionalDetailsSuccess(Object o) {
+        detailFragment.AdditionalDetailsSuccess((AdditionalDetails) o);
     }
 }

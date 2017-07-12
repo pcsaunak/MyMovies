@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +17,6 @@
         <activity android:name=".ui.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -28,7 +28,23 @@
             android:name=".sqlite.MovieContentProvider"
             android:authorities="offlineminds.com.own.PROVIDER"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="true" />
+
+        <receiver
+            android:name=".appalarmmgr.MovieBroadcastReceiver"
+            android:enabled="false"
+            android:exported="false" />
+        <receiver
+            android:name=".appalarmmgr.MovieAlarmReceiver"
+            android:enabled="false"
+            android:exported="false" />
+
+        <service android:name=".appalarmmgr.ScheduledDataFetching" />
+
+        <receiver
+            android:name=".appalarmmgr.MyReceiver"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

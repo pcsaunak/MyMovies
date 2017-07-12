@@ -10,7 +10,6 @@
     <GridView
 
         android:numColumns="2"
-        android:columnWidth="90dp"
         android:verticalSpacing="0dp"
         android:horizontalSpacing="0dp"
         android:stretchMode="columnWidth"

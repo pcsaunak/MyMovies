@@ -35,17 +35,20 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS " + config.TABLE_RESULT);
         db.execSQL(config.CREATE_TABLE_RESULT);
+
+        db.execSQL("DROP TABLE IF EXISTS " + config.TABLE_COMEDY_MOVIES);
+        db.execSQL(config.CREATE_TABLE_COMEDY_MOVIES);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS" + config.TABLE_RESULT);
-
+        db.execSQL("DROP TABLE IF EXISTS " + config.TABLE_COMEDY_MOVIES);
         onCreate(db);
     }
 
 
-    public long insertIntoResult(Result result) {
+    public long insertIntoResult(Result result,String tableName) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues data = new ContentValues();
         data.put(config.KEY_movie_id,result.getId());
@@ -64,13 +67,13 @@ public class DBHelper extends SQLiteOpenHelper {
         data.put(config.KEY_release_date, result.getReleaseDate());
         data.put(config.KEY_CREATED_AT, getDateTime());
 
-        long id = db.insert(config.TABLE_RESULT, null, data);
+        long id = db.insert(tableName, null, data);
         return id;
     }
 
 
-    public List<Result> getMoviesFromDB() {
-        String selectQueryOnResultTable = "Select * from " + config.TABLE_RESULT;
+    public List<Result> getMoviesFromDB(String tableName) {
+        String selectQueryOnResultTable = "Select * from " + tableName;
         SQLiteDatabase readDb = getReadableDatabase();
         List<Result> resultList = new ArrayList<>();
         Cursor c = readDb.rawQuery(selectQueryOnResultTable, null);
@@ -81,6 +84,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (c != null && c.moveToFirst()) {
             do {
                 int code = c.getInt(c.getColumnIndex(config.KEY_ID));
+                int movie_id = c.getInt(c.getColumnIndex(config.KEY_movie_id));
                 String voteCount = c.getString(c.getColumnIndex(config.KEY_votecount));
                 String video = c.getString(c.getColumnIndex(config.KEY_video));
                 String voteAverage = c.getString(c.getColumnIndex(config.KEY_vote_average));
@@ -99,28 +103,30 @@ public class DBHelper extends SQLiteOpenHelper {
                 String s = genre_ids.substring(1, genre_ids.length() - 1);
                 String[] s1 = s.split(",");
 
-                System.out.println(Arrays.toString(s1));
+//                System.out.println(Arrays.toString(s1));
 
                 List<Integer> genereList = new ArrayList<>();
                 for (String genereId : s1) {
-                    genereList.add(Integer.parseInt(genereId));
+                    genereList.add(Integer.parseInt(genereId.trim()));
                 }
 
 
                 Result myResult = new Result();
+                myResult.setId(movie_id);
                 myResult.setVoteCount(Integer.parseInt(voteCount));
                 myResult.setVideo(Boolean.parseBoolean(video));
                 myResult.setVoteAverage(Double.parseDouble(voteAverage));
                 myResult.setTitle(title);
                 myResult.setAdult(Boolean.parseBoolean(adult));
                 myResult.setBackdropPath(backdrop_path);
-//                myResult.setGenreIds(genereList);
+                myResult.setGenreIds(genereList);
                 myResult.setOriginalLanguage(original_language);
                 myResult.setOriginalTitle(original_title);
                 myResult.setOverview(overview);
                 myResult.setPopularity(Double.parseDouble(popularity));
                 myResult.setPosterPath(poster_path);
                 myResult.setReleaseDate(release_date);
+                resultList.add(myResult);
             } while (c.moveToNext());
 
         }

@@ -9,4 +9,6 @@ import java.util.List;
 public interface DetailFragResource {
     public void getMovieTrailFromAPI(String movieId);
     public void onSuccess(List list);
+    public void getAdditionalMovieDetails(String movieId);
+    public void additionalDetailsSuccess(Object o);
 }

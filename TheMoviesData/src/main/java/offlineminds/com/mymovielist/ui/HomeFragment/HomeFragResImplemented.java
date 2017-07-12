@@ -27,7 +27,7 @@ public class HomeFragResImplemented implements HomeFragResource {
     public void fetchDataFromAPI() {
         Log.d(TAG,"Inside fetchData");
 //        networkObj.makeGetRequest();
-        retrofitObj.makeRequest();
+        retrofitObj.getPopularMoviesJson();
     }
 
     @Override
@@ -35,6 +35,8 @@ public class HomeFragResImplemented implements HomeFragResource {
 
         String displayResponse = "";
         resultList=results;
+
+        /*
         for (Result result: resultList){
             displayResponse += result.getId() + " " +
                     result.getOriginalTitle() + " " +
@@ -43,6 +45,7 @@ public class HomeFragResImplemented implements HomeFragResource {
                     result.getReleaseDate() + "\n";
         }
         Log.d(TAG,displayResponse);
+        */
 
         homeFragPresenter.onSuccess(resultList);
 

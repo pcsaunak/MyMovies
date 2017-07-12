@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import android.support.annotation.StringDef;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -33,6 +34,7 @@ import java.util.List;
 
 import offlineminds.com.mymovielist.R;
 import offlineminds.com.mymovielist.config;
+import offlineminds.com.mymovielist.pojo.AdditionalDetails;
 import offlineminds.com.mymovielist.pojo.Result;
 import offlineminds.com.mymovielist.pojo.TrailerDetails;
 
@@ -53,7 +55,7 @@ public class DetailFragment extends Fragment implements DetailFragmentView,YouTu
     TextView tv_overview;
     TextView tv_duration;
     FrameLayout youTubeContent;
-
+    int runtime;
     int screenWidth;
     int screenHeight;
     LinearLayout mainLayout;
@@ -103,7 +105,7 @@ public class DetailFragment extends Fragment implements DetailFragmentView,YouTu
 
         Result item = resultList.get(positionOfGridElement);
         detailFragPresenter.getMovieTrailer(String.valueOf(item.getId()));
-
+        detailFragPresenter.getAdditionalDetails(String.valueOf(item.getId()));
 
 
         youTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();
@@ -133,7 +135,6 @@ public class DetailFragment extends Fragment implements DetailFragmentView,YouTu
         tv_voteAverage.setText(String.valueOf(item.getVoteAverage()+"/10"));
         tv_releaseDate.setText(String.valueOf(item.getReleaseDate().substring(0,4)));
         tv_overview.setText(item.getOverview());
-
     }
 
 
@@ -148,6 +149,12 @@ public class DetailFragment extends Fragment implements DetailFragmentView,YouTu
         trailerList = list;
         youTubePlayerFragment.initialize(config.DEVELOPER_KEY,this);
 
+    }
+
+    @Override
+    public void AdditionalDetailsSuccess(AdditionalDetails details) {
+        runtime=details.getRuntime();
+        tv_duration.setText(String.valueOf(runtime) + " mins");
     }
 
     @Override

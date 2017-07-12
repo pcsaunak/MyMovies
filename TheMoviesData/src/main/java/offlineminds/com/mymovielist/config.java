@@ -19,6 +19,7 @@ public class config {
 
     // Table Names
     public static final String TABLE_RESULT = "result";
+    public static final String TABLE_COMEDY_MOVIES = "resultComedy";
 
     // Common column names
     public static final String KEY_ID = "id";
@@ -47,6 +48,27 @@ public class config {
 
     public static final String CREATE_TABLE_RESULT = "CREATE TABLE "
             + TABLE_RESULT + "(" + KEY_ID + " INTEGER PRIMARY KEY," +
+            KEY_movie_id + " INTEGER," +
+            KEY_votecount + " INTEGER," +
+            KEY_video + " INTEGER," +
+            KEY_vote_average + " REAL," +
+            KEY_title + " TEXT," +
+            KEY_popularity + " REAL," +
+            KEY_poster_path + " TEXT," +
+            KEY_original_title + " TEXT," +
+            KEY_original_language + " TEXT," +
+            KEY_genre_ids + " TEXT," +
+            KEY_backdrop_path + " TEXT," +
+            KEY_adult + " TEXT," +
+            KEY_release_date + " TEXT," +
+            KEY_overview + " TEXT," +
+            KEY_CREATED_AT + " DATETIME" + ")";
+
+
+
+
+    public static final String CREATE_TABLE_COMEDY_MOVIES = "CREATE TABLE "
+            + TABLE_COMEDY_MOVIES + "(" + KEY_ID + " INTEGER PRIMARY KEY," +
             KEY_movie_id + " INTEGER," +
             KEY_votecount + " INTEGER," +
             KEY_video + " INTEGER," +

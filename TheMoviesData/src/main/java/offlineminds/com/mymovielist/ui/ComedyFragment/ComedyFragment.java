@@ -1,16 +1,11 @@
-package offlineminds.com.mymovielist.ui.HomeFragment;
+package offlineminds.com.mymovielist.ui.ComedyFragment;
 
 
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-
-
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
@@ -23,68 +18,54 @@ import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import offlineminds.com.mymovielist.R;
 import offlineminds.com.mymovielist.config;
 import offlineminds.com.mymovielist.pojo.Result;
 import offlineminds.com.mymovielist.sqlite.DBHelper;
-import offlineminds.com.mymovielist.ui.Adapter.GridViewAdapter;
+import offlineminds.com.mymovielist.ui.Adapter.AdapterComedyFragment;
 import offlineminds.com.mymovielist.ui.DetailFragments.DetailFragment;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements HomeFragmentView, View.OnClickListener {
+public class ComedyFragment extends Fragment implements ComedyFragmentView,View.OnClickListener {
 
-    private static String TAG = HomeFragment.class.getName();
+
     private GridView mGridView;
     private ProgressBar mProgressBar;
-    private GridViewAdapter mGridAdapter;
+    private AdapterComedyFragment mGridAdapter;
     private ArrayList<Result> mGridData;
     private DBHelper dbHelper;
-    private Uri providerUri = Uri.parse("content://offlineminds.com.own.PROVIDER");
-    ContentResolver movieResolver;
-    Cursor movieCursor;
+    private Uri providerUri;
 
-    String[] projection = null;
-    String selection = null;
-    String[] selectionArgs = null;
-    String sortOrder = null;
-    String millis;
-    Boolean comparedDate = true;
+    private static String TAG = ComedyFragment.class.getName();
+    ComedyFragmentPresenter comedyFragmentPresenter = new ComedyFragPresenterImplemented(this);
 
-//    private Button dbData;
 
-    public HomeFragment() {
+
+    public ComedyFragment() {
         // Required empty public constructor
     }
-
-    HomeFragPresenter fragPresenter = new HomeFragPresenterImplemented(this);
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
         dbHelper = new DBHelper(getContext());
-        movieResolver = getContext().getContentResolver();
+        return inflater.inflate(R.layout.fragment_home, container, false);
 
-        return view;
     }
 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         mGridView = (GridView) view.findViewById(R.id.gridView);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
@@ -93,34 +74,22 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int dpi = metrics.densityDpi;
 
-        mGridView.setColumnWidth(dpi / 2);
+        mGridView.setColumnWidth(dpi/2);
 
 //        dbData = (Button) view.findViewById(R.id.getDataFromDb);
 
         //Initialize with empty data
         mGridData = new ArrayList<>();
-
-
-        mGridAdapter = new GridViewAdapter(getContext(),
+        mGridAdapter = new AdapterComedyFragment(getContext(),
                 R.layout.grid_item_layout,
                 mGridData,
                 getContext(),
                 R.layout.grid_item_layout,
                 mGridData);
-
-
         mGridView.setAdapter(mGridAdapter);
+
+        comedyFragmentPresenter.getDataFromPresenter();
         mProgressBar.setVisibility(View.VISIBLE);
-
-
-        populateGridDataFromDB();
-
-
-//        if (dbHelper.getMoviesFromDB(config.TABLE_RESULT).isEmpty()) {
-//            fragPresenter.getDataFromPresenter();
-//        } else {
-//
-//        }
 
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -128,11 +97,11 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
                 Toast.makeText(getContext(), "Grid Item Clicked", Toast.LENGTH_SHORT).show();
                 Fragment detailFrag = new DetailFragment(mGridData);
                 Bundle bundle = new Bundle();
-                bundle.putInt("ClickPosition", position);
+                bundle.putInt("ClickPosition",position);
                 detailFrag.setArguments(bundle);
-                FragmentManager detailFragMgr = getActivity().getSupportFragmentManager();
+                FragmentManager detailFragMgr= getActivity().getSupportFragmentManager();
                 FragmentTransaction detailFragTransct = detailFragMgr.beginTransaction();
-                detailFragTransct.replace(R.id.contentFrame, detailFrag).addToBackStack(null).commit();
+                detailFragTransct.replace(R.id.contentFrame,detailFrag).addToBackStack(null).commit();
             }
         });
 
@@ -141,39 +110,36 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
     @Override
     public void updateDataFromAPI(List<Result> results) {
 
-//        dbData.setVisibility(View.VISIBLE);
-        for (Result myResult : results) {
-            dbHelper.insertIntoResult(myResult, config.TABLE_RESULT);
+        for(Result myResult : results){
+            // CREATE DB FOR STORING THE VALUES FOR COMEDY MOVIES
+            dbHelper.insertIntoResult(myResult, config.TABLE_COMEDY_MOVIES);
         }
 
-//        mGridData = (ArrayList<Result>) results;
+       /*
+        String[] projection=null;
+        String selection = null;
+        String[] selectionArgs = null;
+        String sortOrder = null;
 
+        ContentResolver movieResolver = getContext().getContentResolver();
+        providerUri=Uri.parse("content://offlineminds.com.own.PROVIDER/TABLE_COMEDY_MOVIES");
 
-        movieCursor = movieResolver.query(providerUri, projection, selection, selectionArgs, sortOrder);
-        mGridData = getDataFromCursor(movieCursor);
+        Cursor movieCursor = movieResolver.query(providerUri,projection,selection,selectionArgs,sortOrder);
+        mGridData=getDataFromCursor(movieCursor);
+        */
+
+        mGridData=(ArrayList<Result>)dbHelper.getMoviesFromDB(config.TABLE_COMEDY_MOVIES);
+        Log.d(TAG,"SIZE OF LIST:::::: " + mGridData.size());
         mGridAdapter.setGridData(mGridData);
         mProgressBar.setVisibility(View.GONE);
+
     }
 
     @Override
     public void displayMessage(String info) {
-        Toast.makeText(getContext(), "Message Passed: " + info, Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "Message Passed: "+info, Toast.LENGTH_LONG).show();
     }
 
-
-    @Override
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-
-            case R.layout.grid_item_layout:
-                Toast.makeText(getContext(), "Grid Item Clicked", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                Toast.makeText(getContext(), "Nothing found", Toast.LENGTH_SHORT).show();
-
-        }
-    }
 
     public ArrayList<Result> getDataFromCursor(Cursor movieCursor) {
         ArrayList<Result> resultList = new ArrayList<>();
@@ -197,12 +163,12 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
                 String s = genre_ids.substring(1, genre_ids.length() - 1);
 
                 String[] s1 = s.split(",");
-//                System.out.println(Arrays.toString(s1));
+                System.out.println(Arrays.toString(s1));
                 List<Integer> genereList = new ArrayList<>();
 
 
                 for (String genereId : s1) {
-//                    Log.d("VALUE OF s1 ", genereId);
+                    Log.d("VALUE OF s1 ",genereId);
                     genereList.add(Integer.parseInt(genereId.trim()));
                 }
 
@@ -227,12 +193,16 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
         return resultList;
     }
 
-    public void populateGridDataFromDB() {
-        movieCursor = movieResolver.query(providerUri, projection, selection, selectionArgs, sortOrder);
-//        mGridData = (ArrayList<Result>) dbHelper.getMoviesFromDB();
-        mGridData = getDataFromCursor(movieCursor);
-        mGridAdapter.setGridData(mGridData);
-        mProgressBar.setVisibility(View.GONE);
-    }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
 
+            case R.layout.grid_item_layout:
+                Toast.makeText(getContext(), "Grid Item Clicked", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(getContext(), "Nothing found", Toast.LENGTH_SHORT).show();
+
+        }
+    }
 }

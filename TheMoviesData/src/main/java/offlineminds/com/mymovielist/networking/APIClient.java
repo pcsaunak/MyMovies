@@ -24,8 +24,6 @@ public class APIClient {
                 .client(client)
                 .build();
 
-
-
         return retrofit;
     }
 }
