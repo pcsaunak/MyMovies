@@ -2,18 +2,34 @@ package offlineminds.com.mymovielist.sqlite;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
 
+import offlineminds.com.mymovielist.appalarmmgr.MovieAlarmReceiver;
 import offlineminds.com.mymovielist.config;
 
 public class MovieContentProvider extends ContentProvider {
 
 
     private DBHelper dbHelper;
+    static String TAG = MovieContentProvider.class.getName();
+    // Creates a UriMatcher object.
+    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    static {
+
+        sUriMatcher.addURI(config.AUTHORITY, config.TABLE_RESULT, 0);
+        sUriMatcher.addURI(config.AUTHORITY,config.TABLE_COMEDY_MOVIES,1);
+        sUriMatcher.addURI(config.AUTHORITY,config.TABLE_ACTION_MOVIES,2);
+        sUriMatcher.addURI(config.AUTHORITY,config.TABLE_DOCUMANTARY,3);
+    }
+
     public MovieContentProvider() {
     }
+
+
 
 
     @Override
@@ -38,7 +54,6 @@ public class MovieContentProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         // TODO: Implement this to initialize your content provider on startup.
-
         dbHelper = new DBHelper(getContext());
         return true;
     }
@@ -48,7 +63,29 @@ public class MovieContentProvider extends ContentProvider {
                         String[] selectionArgs, String sortOrder) {
         // TODO: Implement this to handle query requests from clients.
         SQLiteDatabase readableDB = dbHelper.getReadableDatabase();
-        return readableDB.query(config.TABLE_RESULT,projection,selection,selectionArgs,null,null,null);
+
+        switch (sUriMatcher.match(uri)){
+            case 0:
+                Log.d(TAG,"URI MATCHED TO Popular");
+                return readableDB.query(config.TABLE_RESULT,projection,selection,selectionArgs,null,null,null);
+
+            case 1:
+                Log.d(TAG,"URI MATCHED TO COMEDY");
+                return readableDB.query(config.TABLE_COMEDY_MOVIES,projection,selection,selectionArgs,null,null,null);
+
+            case 2:
+                Log.d(TAG,"URI MATCHED TO ACTION");
+                return readableDB.query(config.TABLE_ACTION_MOVIES,projection,selection,selectionArgs,null,null,null);
+
+            case 3:
+                Log.d(TAG,"URI MATCHED TO DOCUMENTARY");
+                return readableDB.query(config.TABLE_ACTION_MOVIES,projection,selection,selectionArgs,null,null,null);
+
+            default:
+                Log.d(TAG,"URI MATCHED TO DEFAULT");
+                return readableDB.query(config.TABLE_RESULT,projection,selection,selectionArgs,null,null,null);
+        }
+
     }
 
     @Override

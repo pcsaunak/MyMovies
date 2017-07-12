@@ -50,6 +50,9 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
     private GridViewAdapter mGridAdapter;
     private ArrayList<Result> mGridData;
     private DBHelper dbHelper;
+
+    private Uri baseUri = Uri.parse("content://"+config.AUTHORITY);
+    private Uri finalUri;
     private Uri providerUri = Uri.parse("content://offlineminds.com.own.PROVIDER");
     ContentResolver movieResolver;
     Cursor movieCursor;
@@ -60,6 +63,8 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
     String sortOrder = null;
     String millis;
     Boolean comparedDate = true;
+    Bundle bundle;
+    int DB_TABLE_REF_KEY;
 
 //    private Button dbData;
 
@@ -85,6 +90,10 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        bundle = getArguments();
+        DB_TABLE_REF_KEY = bundle.getInt(config.KEY_DRAWER_CLICKED);
+
         mGridView = (GridView) view.findViewById(R.id.gridView);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
@@ -113,7 +122,7 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
         mProgressBar.setVisibility(View.VISIBLE);
 
 
-        populateGridDataFromDB();
+        populateGridDataFromDB(DB_TABLE_REF_KEY);
 
 
 //        if (dbHelper.getMoviesFromDB(config.TABLE_RESULT).isEmpty()) {
@@ -227,8 +236,33 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
         return resultList;
     }
 
-    public void populateGridDataFromDB() {
-        movieCursor = movieResolver.query(providerUri, projection, selection, selectionArgs, sortOrder);
+    public void populateGridDataFromDB(int uriSelector) {
+
+        switch (uriSelector){
+            case 0:
+                Log.d(TAG,"URI MATCHED TO POPULAR MOVIES");
+                finalUri= baseUri.buildUpon().appendPath(config.TABLE_RESULT).build();
+                break;
+            case 1:
+                finalUri=baseUri.buildUpon().appendPath(config.TABLE_COMEDY_MOVIES).build();
+                Log.d(TAG,"URI MATCHED TO COMEDY MOVIES:: "+ finalUri);
+                break;
+            case 2:
+                finalUri=baseUri.buildUpon().appendPath(config.TABLE_ACTION_MOVIES).build();
+                Log.d(TAG,"URI MATCHED TO ACTION MOVIES:: "+ finalUri);
+                break;
+
+            case 3:
+                finalUri=baseUri.buildUpon().appendPath(config.TABLE_DOCUMANTARY).build();
+                Log.d(TAG,"URI MATCHED TO DOCUMENTARY MOVIES:: "+ finalUri);
+                break;
+            default:
+                finalUri=providerUri;
+                Log.d(TAG,"URI MATCHED TO DEFAULT:: "+ finalUri);
+                break;
+        }
+
+        movieCursor = movieResolver.query(finalUri, projection, selection, selectionArgs, sortOrder);
 //        mGridData = (ArrayList<Result>) dbHelper.getMoviesFromDB();
         mGridData = getDataFromCursor(movieCursor);
         mGridAdapter.setGridData(mGridData);

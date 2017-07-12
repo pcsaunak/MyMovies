@@ -33,12 +33,13 @@ import offlineminds.com.mymovielist.R;
 import offlineminds.com.mymovielist.appalarmmgr.MovieAlarmReceiver;
 import offlineminds.com.mymovielist.appalarmmgr.MyReceiver;
 import offlineminds.com.mymovielist.appalarmmgr.ScheduledDataFetching;
+import offlineminds.com.mymovielist.config;
 import offlineminds.com.mymovielist.ui.ComedyFragment.ComedyFragment;
 import offlineminds.com.mymovielist.ui.HomeFragment.HomeFragment;
 
 public class MainActivity extends FragmentActivity implements MainView {
 
-    static String TAG= MainActivity.class.getName();
+    static String TAG = MainActivity.class.getName();
     MovieAlarmReceiver movieAlarmReceiver;
     DrawerLayout drawerLayout;
     ListView navigationList;
@@ -85,21 +86,21 @@ public class MainActivity extends FragmentActivity implements MainView {
         setNewAlarm(this);
     }
 
-    public void setNewAlarm(Context context){
+    public void setNewAlarm(Context context) {
         Intent myIntent = new Intent(context, MyReceiver.class);
-        PendingIntent myPendingIntent = PendingIntent.getBroadcast(context,1231231,myIntent,0);
+        PendingIntent myPendingIntent = PendingIntent.getBroadcast(context, 1231231, myIntent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        long interval = (3*60*60*1000);
+        long interval = (3 * 60 * 60 * 1000);
 
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),interval,myPendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, myPendingIntent);
 
-        Toast.makeText(context, "Alarm Set After " + (3*60) + " seconds", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Alarm Set After " + (3 * 60) + " seconds", Toast.LENGTH_SHORT).show();
     }
 
 
     public void setAlarm(Context context) {
 
-        Log.d(TAG,"Inside Set Alarm of Main Activity");
+        Log.d(TAG, "Inside Set Alarm of Main Activity");
         AlarmManager alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(context, MovieAlarmReceiver.class);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
@@ -129,23 +130,52 @@ public class MainActivity extends FragmentActivity implements MainView {
     public void selectItem(int position) {
         switch (position) {
             case 0:
-                Fragment homeFragment = new HomeFragment();
+                /*Fragment homeFragment = new HomeFragment();
                 FragmentManager homeFragMgr = getSupportFragmentManager();
+
+                Bundle bundle = new Bundle();
+                bundle.putInt(config.KEY_DRAWER_CLICKED, 0);
+                homeFragment.setArguments(bundle);
+
                 FragmentTransaction homeFragTrans = homeFragMgr.beginTransaction();
                 homeFragTrans.replace(R.id.contentFrame, homeFragment).commit();
                 drawerLayout.closeDrawer(navigationList);
+                */
+
+                createFragment(0);
                 break;
 
             case 1:
-                Fragment commedyFragment = new ComedyFragment();
+               /* Fragment commedyFragment = new ComedyFragment();
                 FragmentManager commedyFragMgr = getSupportFragmentManager();
                 FragmentTransaction commedyFragTransct = commedyFragMgr.beginTransaction();
                 commedyFragTransct.replace(R.id.contentFrame, commedyFragment).commit();
+                */
+               createFragment(1);
                 break;
 
+            case 2:
+                createFragment(2);
+                break;
+
+            case 3:
+                createFragment(3);
+                break;
             default:
                 Toast.makeText(this, "Not Defined", Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+    public void createFragment(int BundleValue) {
+        Fragment homeFragment = new HomeFragment();
+        FragmentManager homeFragMgr = getSupportFragmentManager();
+        Bundle bundle = new Bundle();
+        bundle.putInt(config.KEY_DRAWER_CLICKED, BundleValue);
+        homeFragment.setArguments(bundle);
+        FragmentTransaction homeFragTrans = homeFragMgr.beginTransaction();
+        homeFragTrans.replace(R.id.contentFrame, homeFragment).commit();
+        drawerLayout.closeDrawer(navigationList);
     }
 
     @Override

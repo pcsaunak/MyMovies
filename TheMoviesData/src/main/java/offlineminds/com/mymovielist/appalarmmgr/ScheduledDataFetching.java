@@ -36,5 +36,8 @@ public class ScheduledDataFetching extends IntentService{
         Toast.makeText(this, "Inside On Handle Intent", Toast.LENGTH_SHORT).show();
 
         myNetworkComObj.getPopularMoviesJson();
+        myNetworkComObj.getComedyMoviesJson();
+        myNetworkComObj.getActionMoviesJson();
+        myNetworkComObj.getDocumentaries();
     }
 }

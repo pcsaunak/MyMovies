@@ -8,6 +8,12 @@ public class config {
     public static String  baseUrl="http://api.themoviedb.org/3/movie/popular?api_key=503f36886ff6cc467d3a00842eb9c4bc";
     public static String imgBaseUrl="http://image.tmdb.org/t/p/w185";
 
+    //AUTHORITY FOR CONTENT PROVIDER
+    public static String AUTHORITY="offlineminds.com.own.PROVIDER";
+
+    //Key used in Bundle for Fragment
+    public static String KEY_DRAWER_CLICKED = "drawerClicked";
+
     // ENTER YOUR PERSONAL API KEY HERE !!!
     public static final String DEVELOPER_KEY = "xxxxxxxxxxxxxxx";
 
@@ -20,6 +26,8 @@ public class config {
     // Table Names
     public static final String TABLE_RESULT = "result";
     public static final String TABLE_COMEDY_MOVIES = "resultComedy";
+    public static final String TABLE_ACTION_MOVIES = "resultAction";
+    public static final String TABLE_DOCUMANTARY = "resultDocumantary";
 
     // Common column names
     public static final String KEY_ID = "id";
@@ -69,6 +77,46 @@ public class config {
 
     public static final String CREATE_TABLE_COMEDY_MOVIES = "CREATE TABLE "
             + TABLE_COMEDY_MOVIES + "(" + KEY_ID + " INTEGER PRIMARY KEY," +
+            KEY_movie_id + " INTEGER," +
+            KEY_votecount + " INTEGER," +
+            KEY_video + " INTEGER," +
+            KEY_vote_average + " REAL," +
+            KEY_title + " TEXT," +
+            KEY_popularity + " REAL," +
+            KEY_poster_path + " TEXT," +
+            KEY_original_title + " TEXT," +
+            KEY_original_language + " TEXT," +
+            KEY_genre_ids + " TEXT," +
+            KEY_backdrop_path + " TEXT," +
+            KEY_adult + " TEXT," +
+            KEY_release_date + " TEXT," +
+            KEY_overview + " TEXT," +
+            KEY_CREATED_AT + " DATETIME" + ")";
+
+
+
+    public static final String CREATE_TABLE_ACTION_MOVIES = "CREATE TABLE "
+            + TABLE_ACTION_MOVIES + "(" + KEY_ID + " INTEGER PRIMARY KEY," +
+            KEY_movie_id + " INTEGER," +
+            KEY_votecount + " INTEGER," +
+            KEY_video + " INTEGER," +
+            KEY_vote_average + " REAL," +
+            KEY_title + " TEXT," +
+            KEY_popularity + " REAL," +
+            KEY_poster_path + " TEXT," +
+            KEY_original_title + " TEXT," +
+            KEY_original_language + " TEXT," +
+            KEY_genre_ids + " TEXT," +
+            KEY_backdrop_path + " TEXT," +
+            KEY_adult + " TEXT," +
+            KEY_release_date + " TEXT," +
+            KEY_overview + " TEXT," +
+            KEY_CREATED_AT + " DATETIME" + ")";
+
+
+
+    public static final String CREATE_TABLE_DOCUMANTARY = "CREATE TABLE "
+            + TABLE_DOCUMANTARY + "(" + KEY_ID + " INTEGER PRIMARY KEY," +
             KEY_movie_id + " INTEGER," +
             KEY_votecount + " INTEGER," +
             KEY_video + " INTEGER," +

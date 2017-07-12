@@ -38,6 +38,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + config.TABLE_COMEDY_MOVIES);
         db.execSQL(config.CREATE_TABLE_COMEDY_MOVIES);
+
+        db.execSQL("DROP TABLE IF EXISTS " + config.TABLE_ACTION_MOVIES);
+        db.execSQL(config.CREATE_TABLE_ACTION_MOVIES);
+
+        db.execSQL("DROP TABLE IF EXISTS " + config.TABLE_DOCUMANTARY);
+        db.execSQL(config.CREATE_TABLE_DOCUMANTARY);
     }
 
     @Override
