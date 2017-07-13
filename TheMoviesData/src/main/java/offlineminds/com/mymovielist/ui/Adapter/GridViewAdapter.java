@@ -2,16 +2,21 @@ package offlineminds.com.mymovielist.ui.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -21,6 +26,7 @@ import java.util.List;
 
 import offlineminds.com.mymovielist.R;
 import offlineminds.com.mymovielist.config;
+import offlineminds.com.mymovielist.pojo.Documentaries;
 import offlineminds.com.mymovielist.pojo.Result;
 
 /**
@@ -32,7 +38,7 @@ public class GridViewAdapter extends ArrayAdapter<Result> {
     private Context mContext;
     private int layoutResourceId;
     private ArrayList<Result> mGridData = new ArrayList<>();
-
+    Result item;
 
     public GridViewAdapter(@NonNull Context context,
                            @LayoutRes int resource,
@@ -61,7 +67,9 @@ public class GridViewAdapter extends ArrayAdapter<Result> {
 
     @Override
     public int getCount() {
-        return mGridData.size();
+        int count=mGridData.size();
+        Log.d("Grid Adapter","Count of Elements: "+count);
+        return count;
     }
 
     @Nullable
@@ -83,19 +91,30 @@ public class GridViewAdapter extends ArrayAdapter<Result> {
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.imageView = (ImageView) row.findViewById(R.id.grid_item_image);
+            holder.ratingBar =(RatingBar) row.findViewById(R.id.rate_img);
+
+
 
             row.setTag(holder);
         } else {
             holder = (ViewHolder) row.getTag();
         }
-        Result item = mGridData.get(position);
+
+
+
+        item = mGridData.get(position);
+
+        holder.ratingBar.setRating((item.getVoteAverage().floatValue())/2);
+
 //        holder.titleTextView.setText(Html.fromHtml(item.getTitle()));
         Picasso.with(mContext).load(config.imgBaseUrl+item.getPosterPath()).into(holder.imageView);
         return row;
     }
 
+
     static class ViewHolder {
 //        TextView titleTextView;
         ImageView imageView;
+        RatingBar ratingBar;
     }
 }

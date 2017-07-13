@@ -81,12 +81,11 @@ public class MainActivity extends FragmentActivity implements MainView {
         if (savedInstanceState == null) {
             selectItem(0);
         }
-        movieAlarmReceiver = new MovieAlarmReceiver();
-        setAlarm(this);
-        setNewAlarm(this);
+
+//        setNewAlarm(this);
     }
 
-    public void setNewAlarm(Context context) {
+    /*public void setNewAlarm(Context context) {
         Intent myIntent = new Intent(context, MyReceiver.class);
         PendingIntent myPendingIntent = PendingIntent.getBroadcast(context, 1231231, myIntent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -95,26 +94,8 @@ public class MainActivity extends FragmentActivity implements MainView {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, myPendingIntent);
 
         Toast.makeText(context, "Alarm Set After " + (3 * 60) + " seconds", Toast.LENGTH_SHORT).show();
-    }
+    }*/
 
-
-    public void setAlarm(Context context) {
-
-        Log.d(TAG, "Inside Set Alarm of Main Activity");
-        AlarmManager alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(context, MovieAlarmReceiver.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-
-        calendar.set(Calendar.HOUR_OF_DAY, 15);
-        calendar.set(Calendar.MINUTE, 00);
-        int interval = 1000;
-
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis(), interval, alarmIntent);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

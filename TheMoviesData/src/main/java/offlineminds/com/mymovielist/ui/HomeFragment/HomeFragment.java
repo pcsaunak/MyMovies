@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
@@ -54,6 +55,9 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
     private Uri baseUri = Uri.parse("content://"+config.AUTHORITY);
     private Uri finalUri;
     private Uri providerUri = Uri.parse("content://offlineminds.com.own.PROVIDER");
+    private Handler mainHandler;
+    ProgressBar loadinBar;
+
     ContentResolver movieResolver;
     Cursor movieCursor;
 
@@ -61,8 +65,7 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
     String selection = null;
     String[] selectionArgs = null;
     String sortOrder = null;
-    String millis;
-    Boolean comparedDate = true;
+
     Bundle bundle;
     int DB_TABLE_REF_KEY;
 
@@ -97,7 +100,7 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
         mGridView = (GridView) view.findViewById(R.id.gridView);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-
+        mainHandler = new Handler();
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int dpi = metrics.densityDpi;
@@ -124,11 +127,11 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
 
         populateGridDataFromDB(DB_TABLE_REF_KEY);
 
-
 //        if (dbHelper.getMoviesFromDB(config.TABLE_RESULT).isEmpty()) {
-//            fragPresenter.getDataFromPresenter();
-//        } else {
 //
+////            fragPresenter.getDataFromPresenter();
+//        } else {
+//            populateGridDataFromDB(DB_TABLE_REF_KEY);
 //        }
 
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -150,16 +153,11 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
     @Override
     public void updateDataFromAPI(List<Result> results) {
 
-//        dbData.setVisibility(View.VISIBLE);
         for (Result myResult : results) {
             dbHelper.insertIntoResult(myResult, config.TABLE_RESULT);
         }
 
-//        mGridData = (ArrayList<Result>) results;
-
-
-        movieCursor = movieResolver.query(providerUri, projection, selection, selectionArgs, sortOrder);
-        mGridData = getDataFromCursor(movieCursor);
+        mGridData = (ArrayList<Result>) results;
         mGridAdapter.setGridData(mGridData);
         mProgressBar.setVisibility(View.GONE);
     }
@@ -263,7 +261,6 @@ public class HomeFragment extends Fragment implements HomeFragmentView, View.OnC
         }
 
         movieCursor = movieResolver.query(finalUri, projection, selection, selectionArgs, sortOrder);
-//        mGridData = (ArrayList<Result>) dbHelper.getMoviesFromDB();
         mGridData = getDataFromCursor(movieCursor);
         mGridAdapter.setGridData(mGridData);
         mProgressBar.setVisibility(View.GONE);

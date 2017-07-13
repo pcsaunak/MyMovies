@@ -32,8 +32,8 @@ public class ScheduledDataFetching extends IntentService{
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         myNetworkComObj = new RetrofitCommunication(getApplicationContext());
+
         Log.d(TAG,"Inside on Handle Intent");
-        Toast.makeText(this, "Inside On Handle Intent", Toast.LENGTH_SHORT).show();
 
         myNetworkComObj.getPopularMoviesJson();
         myNetworkComObj.getComedyMoviesJson();

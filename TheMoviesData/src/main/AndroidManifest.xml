@@ -30,15 +30,6 @@
             android:enabled="true"
             android:exported="true" />
 
-        <receiver
-            android:name=".appalarmmgr.MovieBroadcastReceiver"
-            android:enabled="false"
-            android:exported="false" />
-        <receiver
-            android:name=".appalarmmgr.MovieAlarmReceiver"
-            android:enabled="false"
-            android:exported="false" />
-
         <service android:name=".appalarmmgr.ScheduledDataFetching" />
 
         <receiver

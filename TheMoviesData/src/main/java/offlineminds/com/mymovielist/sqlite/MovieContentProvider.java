@@ -79,7 +79,7 @@ public class MovieContentProvider extends ContentProvider {
 
             case 3:
                 Log.d(TAG,"URI MATCHED TO DOCUMENTARY");
-                return readableDB.query(config.TABLE_ACTION_MOVIES,projection,selection,selectionArgs,null,null,null);
+                return readableDB.query(config.TABLE_DOCUMANTARY,projection,selection,selectionArgs,null,null,null);
 
             default:
                 Log.d(TAG,"URI MATCHED TO DEFAULT");

@@ -2,7 +2,7 @@
     <string name="app_name">MyMovieList</string>
     <string-array name="drawerListItems">
         <item>Popular</item>
-        <item>Commedy</item>
+        <item>Comedy</item>
         <item>Action</item>
         <item>Documentary</item>
     </string-array>

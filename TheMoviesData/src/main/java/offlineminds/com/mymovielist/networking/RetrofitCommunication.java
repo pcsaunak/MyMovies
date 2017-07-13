@@ -32,7 +32,7 @@ public class RetrofitCommunication {
     ;
     List<Result> resultList;
 
-    DBHelper dbHelperForRetrofitCom;
+    DBHelper dbHelperForRetrofitCom=null;
     HomeFragResource homeFragResource;
     DetailFragResource detailFragResource;
     ComedyFragResource comedyFragResource;
@@ -63,11 +63,15 @@ public class RetrofitCommunication {
 
                 PopularMovies popularMovies = (PopularMovies) response.body();
                 resultList = popularMovies.getResults();
-                for (Result myResult : resultList) {
-                    dbHelperForRetrofitCom.insertIntoResult(myResult, config.TABLE_RESULT);
-                }
-//                homeFragResource.onSuccess(resultList);
 
+                if (dbHelperForRetrofitCom.equals(null)){
+                    homeFragResource.onSuccess(resultList);
+                }else {
+
+                    for (Result myResult : resultList) {
+                            dbHelperForRetrofitCom.insertIntoResult(myResult, config.TABLE_RESULT);
+                    }
+                }
             }
 
             @Override
@@ -113,8 +117,9 @@ public class RetrofitCommunication {
                 Documentaries documentaries = (Documentaries) response.body();
                 documentaryList = documentaries.getResults();
 
-                for (Result myActionMovie : documentaryList) {
-                    dbHelperForRetrofitCom.insertIntoResult(myActionMovie, config.TABLE_ACTION_MOVIES);
+                for (Result myDocumentary : documentaryList) {
+                    Log.d("Documentary Movie","Commedy Movie response: " + myDocumentary.getOriginalTitle() + "\n" + myDocumentary.getReleaseDate());
+                    dbHelperForRetrofitCom.insertIntoResult(myDocumentary, config.TABLE_DOCUMANTARY);
                 }
             }
 
@@ -158,7 +163,8 @@ public class RetrofitCommunication {
                 comedyMoviesList = comedyMovies.getResults();
 
                 for (Result myComedyMovie : comedyMoviesList) {
-                    dbHelperForRetrofitCom.insertIntoResult(myComedyMovie, config.TABLE_ACTION_MOVIES);
+
+                    dbHelperForRetrofitCom.insertIntoResult(myComedyMovie, config.TABLE_COMEDY_MOVIES);
                 }
             }
 
